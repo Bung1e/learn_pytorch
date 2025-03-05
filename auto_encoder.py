@@ -41,9 +41,23 @@ mnist_train = torchvision.datasets.MNIST(r'edu\PyTorch\datasets\mnist', download
 train_data = data.DataLoader(mnist_train, batch_size=32, shuffle=True)
 
 mnist_test = torchvision.datasets.MNIST(r'edu\PyTorch\datasets\mnist', download=True, train=False, transform=transforms)
-test_data = data.DataLoader(mnist_test, batch_size=32, shuffle=True)
+test_data = data.DataLoader(mnist_test, batch_size=32, shuffle=False)
 
+optimizer = optim.Adam(params=model.parameters(), lr=0.01)
+loss_function = nn.MSELoss()
+epochs = 15
 
+for _ in range(epochs):
+    model.train()
+    train_tqdm = tqdm(train_data, leave=True)
+    for x_train, y_train in train_data:
+        predict = model.predict(x_train())
+        loss = loss_function(predict, x_train)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+    
 
 model = autoEncoder()
 print(len(test_data))
